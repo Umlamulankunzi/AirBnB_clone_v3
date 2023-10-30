@@ -29,7 +29,7 @@ def not_found(error):
 
 if __name__ == "__main__":
     # get host & port from environment variables.
-    HOST = getenv("HBNB_API_HOST"), "0.0.0.0"
+    HOST = getenv("HBNB_API_HOST") or "0.0.0.0"
     PORT = getenv("HBNB_API_PORT") or 5000
 
     # Running app in multi thread to boost performance
