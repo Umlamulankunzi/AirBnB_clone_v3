@@ -50,7 +50,6 @@ def delete_amenity(place_id, amenity_id):
     abort(404)
 
 
-
 @app_views.route('/places/<place_id>/amenities/<amenity_id>',
                  methods=['POST'], strict_slashes=False)
 def linkAmenityPlace(place_id, amenity_id):
