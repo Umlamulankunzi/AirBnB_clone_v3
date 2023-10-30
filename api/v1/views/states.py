@@ -9,23 +9,34 @@ from api.v1.views import app_views
 from models import storage
 
 
-# API ROUTE: /states                GET
-@app_views.route("/states", methods=["GET"], strict_slashes=False)
+# API ROUTE: /states                method=GET
+# GET ALL states
+@app_views.route("/states",
+                 methods=["GET"],
+                 strict_slashes=False)
 def get_all_states():
     """Get list of all state objects"""
     states = storage.all(State).values()
     state_list = [state.to_dict() for state in states]
     return jsonify(state_list)
 
-# API ROUTE: /states/<state_id>     GET
-@app_views.route("/states/<state_id>", methods=["GET"], strict_slashes=False)
+
+# API ROUTE: /states/<state_id>     method=GET
+# GET ONE state
+@app_views.route("/states/<state_id>",
+                 methods=["GET"],
+                 strict_slashes=False)
 def get_one_state(state_id):
     """Get state object with state.id==state_id"""
     state = storage.get(State, state_id)
     return jsonify(state.to_dict()) if state else abort(404)
 
-# API ROUTE: /states/<state_id>     DELETE
-@app_views.route("/states/<state_id>", methods=["DELETE"], strict_slashes=False)
+
+# API ROUTE: /states/<state_id>     method=DELETE
+# DELETE state
+@app_views.route("/states/<state_id>",
+                 methods=["DELETE"],
+                 strict_slashes=False)
 def delete_state(state_id):
     """Delete state object with state.id==state_id"""
     state = storage.get(State, state_id)
@@ -35,8 +46,12 @@ def delete_state(state_id):
         return jsonify({}), 200
     abort(404)
 
-# API ROUTE: /states         POST
-@app_views.route("/states", methods=["POST"], strict_slashes=False)
+
+# API ROUTE: /states            method=POST
+# CREATE state
+@app_views.route("/states",
+                 methods=["POST"],
+                 strict_slashes=False)
 def create_state():
     """Create new state object"""
     data = request.get_json()
@@ -53,7 +68,12 @@ def create_state():
     # return created state & status code 201
     return jsonify(state.to_dict()), 201
 
-@app_views.route("/states/<state_id>", methods=["PUT"], strict_slashes=False)
+
+# API ROUTE: "/states/<state_id>"            method=PUT
+# CREATE state
+@app_views.route("/states/<state_id>",
+                 methods=["PUT"],
+                 strict_slashes=False)
 def update_state(state_id):
     """update a State instance"""
     # get state object with state.id==state_id from storage
@@ -76,15 +96,16 @@ def update_state(state_id):
         state.save()
         return jsonify(state.to_dict()), 200
 
-    else:
-        # Return Error 404: if state object not found
-        abort(404)
+    # Return Error 404: if state object not found
+    abort(404)
+
 
 @app_views.errorhandler(404)
 def not_found(error):
     """Handles Resource Not Found Error: 404"""
     response = {"error": "Not found"}
     return jsonify(response), 404
+
 
 @app_views.errorhandler(400)
 def bad_request(error):
